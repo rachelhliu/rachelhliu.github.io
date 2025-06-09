@@ -1,1 +1,145 @@
-Hello World
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css" />
+    <title>Rachel Liu</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        section {
+            height: 100vh;
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+  
+    <main id="home">
+      <h2>hello world, <span class="accent">i'm rachel</span></h2>
+      <h3>i like 2 code :D</h3>
+      <div class="button-group">
+        <button onclick="openModal('aboutModal')">about me</button>
+        <button onclick="openModal('projectsModal')">projects</button>
+        <button onclick="openModal('contactModal')">contact</button>
+      </div>
+    </main>
+  
+    <!-- About Me -->
+    <div class="modal" id="aboutModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>about me</h2>
+        <p>
+            hello world, im rachel. i recently graduated from the university of maryland,
+            college park with a bachelor's degree in computer science and a minor in philosophy. 
+            i love front end development but i have a ton of experience with back end as well. 
+            i thrive in fast paced, collaborative environments and have a passion for turning ideas
+            into working, polished products.
+            <br>
+            <br>
+            outside of software development, you can find me playing volleyball or basketball, traveling, 
+            or just hanging out with my dog, <a href="#" onclick="openImage()">moose</a>.
+        </p>
+      </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content image-modal-content">
+            <span class="close" onclick="closeImage()">&times;</span>
+            <h3 class="caption">the cutest dog in the world, moose  ૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა</h3>
+            <img src="assets/moose.JPG" alt="picture of my dog, moose" class="modal-image">
+        </div>
+    </div>
+  
+    <!-- Projects -->
+    <div class="modal" id="projectsModal">
+        <div class="modal-content scrollable-projects">
+        <span class="close" onclick="closeModal('projectsModal')">&times;</span>
+        <h2>projects i've worked on</h2>
+        <div class="projects-scrollbox">
+            <ul class="project-list">
+            <li>
+                <strong>TravelBuddy</strong><br>
+                <p>
+                    This was one of my favorite projects! It is an Android app that lets users share their favorite travel spots with friends, 
+                    complete with ratings and a leaderboard for the most-loved destinations.I built it using Kotlin in Android Studio and hooked
+                    it up to Firebase Realtime Database to keep everything in sync across devices. This project really sparked my interest in app
+                    design; there's something so satisfying about creating an experience for user's that's both fun and functional.
+                </p>
+            </li>
+            <li>
+                <strong>Slimes Don’t Burn</strong><br>
+                <p>
+                    This was my first real experience with game development. Slimes Don't Burn is a chaotic, dungeon crawler style
+                    game with air-hockey inspired physics. Built in Unity, this project taught me how to think like a game programmer: 
+                    balancing mechanics, debugging collisions, and keeping gameplay fun. It was challenging and definitely made me reroute 
+                    my brain - especially since I'm not much of a gamer - but that made the process even more rewarding.
+                </p>
+            </li>
+            <li>
+                <strong>BIST</strong><br>
+                <p>
+                    BIST was one of my most technical deep dives. While interning at Intellian Technologies, I helped implement a built-in self-test (BIST) system for a flat panel 
+                    antenna, working primarily in C and C++. The goal was to enable the antenna's processor to verify its own functionality without external tools. It pushed me to 
+                    understand hardware-software integration on a deeper level and taught me a lot about working in real-world embedded systems with tight constraints and exacting 
+                    requirements. Debugging was intense, but seeing the test work successfully for the first time? Super rewarding.
+                </p>            
+            </li>
+            <li>
+                <strong>IModem</strong><br>
+                <p>
+                    IModem was a crash course in low-level communication protocols. I implemented XModem and YModem functionality to enable reliable file transfers on a Myir board 
+                    using C and C++. It involved opening the correct serial ports, setting baud rates, and getting raw data to successfully send and recieve. This project taught me
+                    a ton about how devices actually "talk" to each other and served as a hands-on introduction to the middle ground between software and hardware for someone coming
+                    from a purely software-focused background. 
+                </p>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+  
+  
+    <!-- Contact -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h2>contact me!</h2>
+            <p>email me at rachelliu1000@gmail.com</p>
+            <p>linkedin: <a href="https://www.linkedin.com/in/rachelhliu" target="_blank">rachelhliu</a></p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+          document.getElementById(id).style.display = 'block';
+        }
+      
+        function closeModal(id) {
+          document.getElementById(id).style.display = 'none';
+        }
+      
+        // Optional: close modal when clicking outside content
+        window.onclick = function (event) {
+          document.querySelectorAll('.modal').forEach(modal => {
+            if (event.target === modal) {
+              modal.style.display = 'none';
+            }
+          });
+        };
+
+        function openImage() {
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        function closeImage() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+      </script>
+
+  </body>
+  
