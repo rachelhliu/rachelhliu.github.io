@@ -78,24 +78,6 @@ a:hover {
 .theme-widget img:hover {
     transform: scale(1.15);
 }
-
-.theme-hint {
-    font-size: .9rem;
-    color: var(--accent);
-    margin-bottom: 2px;
-    opacity: 0.8;
-}  
-
-
-.theme-curve {
-    display: none;
-}  
-
-@media (max-width: 800px) {
-    .theme-curve {
-        display: block;
-    }
-}
   
 /* Centered Home Screen */
 main {
