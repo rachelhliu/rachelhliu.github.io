@@ -19,6 +19,20 @@
 <body>
     <main class="theme-widget" id="home">
             <div class="home-box">
+                <div class="theme-widget">
+                    <svg viewBox="0 0 200 100" width="200" height="120" class="theme-curve">
+                      <defs>
+                        <path id="arcPath" d="M 10,90 A 90,90 0 0,1 190,90" />
+                      </defs>
+                      <text font-size="12" fill="var(--accent)" text-anchor="middle">
+                        <textPath href="#arcPath" startOffset="50%">
+                          click icon to change theme colors!
+                        </textPath>
+                      </text>
+                    </svg>
+                </div>
+                  
+
                 <div id="theme-toggle">
                     <img src="assets/matcha.png" id="matcha-toggle" alt="matcha mode" onclick="setTheme('star')" />
                     <img src="assets/star.png" id="star-toggle" alt="pink mode" onclick="setTheme('matcha')" style="display: none;" />
@@ -71,7 +85,7 @@
     </div>
 
     <div id="rachelImage" class="modal">
-        <div class="modal-content" style="overflow: hidden;">
+        <div class="modal-content">
             <div class="modal-header" onmousedown="startDrag(event, this.parentElement)">
                 <span class="close" onclick="closeImage('rachelImage')">&times;</span>
                 <span class="modal-title">me, rachel.</span>
@@ -170,10 +184,12 @@
                 bringToFront(modal);
 
                 const content = modal.querySelector('.modal-content');
-                content.style.left = '50%';
-                content.style.top = '50%';
-                content.style.transform = 'translate(-50%, -50%)';
-                content.style.zIndex = modalZ++;
+                if (content) {
+                    content.style.left = '50%';
+                    content.style.top = '50%';
+                    content.style.transform = 'translate(-50%, -50%)';
+                    content.style.zIndex = modalZ++;
+                }   
             }
         }
       
@@ -182,7 +198,19 @@
         }
       
         function openImage(id) {
-            document.getElementById(id).style.display = 'flex';
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.style.display = 'flex';
+                bringToFront(modal);
+
+                const content = modal.querySelector('.modal-content');
+                if (content) {
+                    content.style.left = '50%';
+                    content.style.top = '50%';
+                    content.style.transform = 'translate(-50%, -50%)';
+                    content.style.zIndex = modalZ++; 
+                }
+            }
         }
 
         function closeImage(id) {
@@ -198,31 +226,51 @@
             document.getElementById('star-toggle').style.display = theme === 'matcha' ? 'none' : 'inline-block';
         }
 
-        function startDrag(e, element){
+        function startDrag(e, element) {
             e.preventDefault();
             bringToFront(element);
 
-            // Get starting positions
+            // Detect type
+            const isTouch = e.type === 'touchstart';
+            const startX = isTouch ? e.touches[0].clientX : e.clientX;
+            const startY = isTouch ? e.touches[0].clientY : e.clientY;
+
             const rect = element.getBoundingClientRect();
-            const offsetX = e.clientX - rect.left;
-            const offsetY = e.clientY - rect.top;
+            const offsetX = startX - rect.left;
+            const offsetY = startY - rect.top;
 
-            function onMouseMove(moveEvent) {
-                element.style.left = (moveEvent.clientX - offsetX) + 'px';
-                element.style.top = (moveEvent.clientY - offsetY) + 'px';
+            function moveHandler(ev) {
+                const clientX = isTouch ? ev.touches[0].clientX : ev.clientX;
+                const clientY = isTouch ? ev.touches[0].clientY : ev.clientY;
+
+                element.style.left = `${clientX - offsetX}px`;
+                element.style.top = `${clientY - offsetY}px`;
                 element.style.transform = 'none';
+
+                // Prevent scrolling on touch
+                if (isTouch) ev.preventDefault();
             }
 
-            function onMouseUp() {
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
+            function endHandler() {
+                if (isTouch) {
+                    document.removeEventListener('touchmove', moveHandler);
+                    document.removeEventListener('touchend', endHandler);
+                } else {
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', endHandler);
+                }
             }
 
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-            
-            
+            if (isTouch) {
+                document.addEventListener('touchmove', moveHandler, { passive: false });
+                document.addEventListener('touchend', endHandler);
+            } else {
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', endHandler);
+            }
         }
+
+
         // Optional: set a default theme on load
         window.onload = () => {
             setTheme('star');
@@ -234,7 +282,15 @@
                 modal.addEventListener('mousedown', () => bringToFront(modal));
 
                 if (header && content) {
-                    header.addEventListener('mousedown', e => startDrag(e, content));
+                    header.addEventListener('mousedown', e => {
+                        bringToFront(modal);
+                        startDrag(e, content);
+                    });
+
+                    header.addEventListener('touchstart', e => {
+                        bringToFront(modal);
+                        startDrag(e, content);
+                    }, { passive: false });
                 }
             });
         }
